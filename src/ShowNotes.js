@@ -1,8 +1,8 @@
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, Navigate } from "react-router-dom";
 import { Row, Stack, Badge, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-export default function ShowNotes() {
+export default function ShowNotes({ onDelete }) {
   const note = useOutletContext();
   return (
     <>
@@ -24,7 +24,15 @@ export default function ShowNotes() {
             <Link to={`/${note.id}/edit`}>
               <Button variant="primary">Edit</Button>
             </Link>
-            <Button variant="outline-danger">Delete</Button>
+            <Button
+              variant="outline-danger"
+              onClick={() => {
+                onDelete(note.id);
+                <Navigate to={"/"} />;
+              }}
+            >
+              Delete
+            </Button>
             <Link to={`/`}>
               <Button variant="outline-secondary">Back</Button>
             </Link>
