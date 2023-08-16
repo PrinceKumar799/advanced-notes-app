@@ -35,14 +35,14 @@ function App() {
       ];
     });
   };
-  const updateNotes = ({ id, tags, ...data }) => {
+  const updateNotes = (id, { tags, ...data }) => {
     setNotes((prevNotes) => {
       return prevNotes.map((note) => {
         if (note.id === id) {
           return {
             ...note,
-            tagIds: tags.map((tag) => tag.id),
             ...data,
+            tagIds: tags.map((tag) => tag.id),
           };
         } else return note;
       });
@@ -51,12 +51,39 @@ function App() {
   const addTag = (newTag) => {
     setTags((prev) => [...prev, newTag]);
   };
+  const deleteNote = (id) => {
+    setNotes((prevNotes) => {
+      return prevNotes.filter((note) => note.id !== id);
+    });
+  };
+
+  //edit tags
+  const editTag = (id, value) => {
+    setTags((tags) =>
+      tags.map((tag) => {
+        if (tag.id === id) {
+          return { ...tag, label: value };
+        } else return tag;
+      })
+    );
+  };
+
+  const deleteTag = (id) => {
+    setTags((tags) => tags.filter((tag) => tag.id != id));
+  };
   return (
     <Container className="my-4">
       <Routes>
         <Route
           path="/"
-          element={<HomePage availableTags={tags} notes={notesWithTags} />}
+          element={
+            <HomePage
+              availableTags={tags}
+              notes={notesWithTags}
+              onEditTag={editTag}
+              onDeleteTag={deleteTag}
+            />
+          }
         />
         <Route
           path="/new"
@@ -69,7 +96,7 @@ function App() {
           }
         />
         <Route path="/:id" element={<NotesLayout notes={notesWithTags} />}>
-          <Route index element={<ShowNotes />} />
+          <Route index element={<ShowNotes onDelete={deleteNote} />} />
           <Route
             path="edit"
             element={
