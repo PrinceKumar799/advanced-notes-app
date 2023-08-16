@@ -1,9 +1,14 @@
-import { Button, Col, Row, Stack, Form } from "react-bootstrap";
+import { Button, Col, Row, Stack, Form, Modal } from "react-bootstrap";
 import NoteCard from "./NoteCard";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { useMemo, useState } from "react";
-export default function HomePage({ notes, availableTags }) {
+export default function HomePage({
+  notes,
+  availableTags,
+  onEditTag,
+  onDeleteTag,
+}) {
   // const cols = notes.map((note) => (
   //   <Col key={note.id}>
   //     <NoteCard data={note.data.text} title={note.data.title} tags={tags} />
@@ -11,6 +16,7 @@ export default function HomePage({ notes, availableTags }) {
   // ));
   const [tags, setTags] = useState([]);
   const [title, setTitle] = useState("");
+  const [showModal, setShowModal] = useState(false);
   let filteredNotes = useMemo(() => {
     return notes.filter((note) => {
       return (
@@ -33,11 +39,16 @@ export default function HomePage({ notes, availableTags }) {
           <h1>Notes</h1>
         </Col>
         <Col xs="auto">
-          <Stack direction="horizontal">
+          <Stack direction="horizontal" gap={2}>
             <Link to={"/new"}>
               <Button variant="primary">Create</Button>
             </Link>
-            <Button variant="secondary-outline">Edit Tags</Button>
+            <Button
+              variant="outline-secondary"
+              onClick={() => setShowModal(true)}
+            >
+              Edit Tags
+            </Button>
           </Stack>
         </Col>
       </Row>
@@ -94,6 +105,72 @@ export default function HomePage({ notes, availableTags }) {
           </Col>
         ))}
       </Row>
+      {showModal && (
+        <EditTagModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          availableTags={availableTags}
+          onEditTag={onEditTag}
+          onDeleteTag={onDeleteTag}
+        />
+      )}
+    </>
+  );
+}
+
+function EditTagModal({
+  showModal,
+  setShowModal,
+  availableTags,
+  onEditTag,
+  onDeleteTag,
+}) {
+  return (
+    <>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Tags</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Stack direction="vertical" gap={2}>
+              {availableTags.map((tag) => (
+                <Row key={tag.id}>
+                  <Col>
+                    <Form.Control
+                      type="text"
+                      defaultValue={tag.label}
+                      onChange={(e) => {
+                        e.preventDefault();
+                        onEditTag(tag.id, e.target.value);
+                      }}
+                    ></Form.Control>
+                  </Col>
+                  <Col xs="auto">
+                    <Button
+                      variant="outline-danger"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onDeleteTag(tag.id);
+                      }}
+                    >
+                      &times;
+                    </Button>
+                  </Col>
+                </Row>
+              ))}
+            </Stack>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={() => setShowModal(false)}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
