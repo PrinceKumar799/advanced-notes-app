@@ -4,10 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { v4 as uuidV4 } from "uuid";
 
-export default function NoteForm({ onSubmit, onAddTag, availableTags }) {
+export default function NoteForm({
+  noteTags = [],
+  title = "",
+  markdown = "",
+  onSubmit,
+  onAddTag,
+  availableTags,
+}) {
   const titleRef = useRef(null);
   const textareaRef = useRef(null);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(noteTags);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,6 +42,7 @@ export default function NoteForm({ onSubmit, onAddTag, availableTags }) {
               type="Text"
               id="title"
               className="form-control"
+              defaultValue={title}
               required
             />
           </Form.Group>
@@ -81,6 +89,7 @@ export default function NoteForm({ onSubmit, onAddTag, availableTags }) {
           class="form-control"
           id="body"
           rows="15"
+          defaultValue={markdown}
           required
         ></textarea>
       </div>
