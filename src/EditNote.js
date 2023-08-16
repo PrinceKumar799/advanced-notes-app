@@ -11,7 +11,7 @@ export default function EditNote({ onUpdate, onAddTag, availableTags }) {
         title={note.data.title}
         noteTags={note.tags}
         markdown={note.data.text}
-        onSubmit={onUpdate}
+        onSubmit={(data) => onUpdate(note.id, data)}
         onAddTag={onAddTag}
         availableTags={availableTags}
       ></NoteForm>
