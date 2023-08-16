@@ -1,15 +1,11 @@
 import { Badge, Stack } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import styles from "./NoteList.modules.css";
 function getRandomColor() {
-  var letters = "0123456789ABCDEF";
-  var color = "#";
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+  const color = ["#586994", "#7D869C", "#A2ABAB", "#B4C4AE", "#E5E8B6"];
+  const idx = Math.floor(Math.random() * 5);
+  return color[idx];
 }
 export default function NoteCard({ id, title, tags }) {
   return (
