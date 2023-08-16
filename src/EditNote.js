@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import NoteForm from "./NoteForm";
 import { useOutletContext } from "react-router-dom";
 

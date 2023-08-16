@@ -1,5 +1,5 @@
 import "./App.css";
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Container } from "react-bootstrap";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -7,7 +7,6 @@ import NewNote from "./NewNote";
 import ShowNotes from "./ShowNotes";
 import useLocalStorage from "./useLocalStorage";
 import { v4 as uuidV4 } from "uuid";
-import NoteCard from "./NoteCard";
 import HomePage from "./HomePage";
 import NotesLayout from "./NotesLayout";
 import EditNote from "./EditNote";
@@ -69,7 +68,7 @@ function App() {
   };
 
   const deleteTag = (id) => {
-    setTags((tags) => tags.filter((tag) => tag.id != id));
+    setTags((tags) => tags.filter((tag) => tag.id !== id));
   };
   return (
     <Container className="my-4">
